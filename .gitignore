@@ -1,1 +1,15 @@
+# ignore data files
 *.csv
+*.zip
+
+# ignore temporary python notebook directories
+.ipynb*
+
+# ignore pdf files, and other TeX files
+*.pdf
+
+# ignore image files
+*.jpg
+*.jpeg
+*.
+
