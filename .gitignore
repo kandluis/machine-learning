@@ -19,3 +19,9 @@
 # ignore zipped and .tar files
 *.tar
 *.tar.gz
+
+# ignore save np savefiles
+generative*
+*.npz
+*.npy
+*.save
