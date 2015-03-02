@@ -1,3 +1,5 @@
+import numpy as np
+
 # these are the fifteen malware classes we're looking for
 malware_classes = ["Agent", "AutoRun", "FraudLoad", "FraudPack", "Hupigon", "Krap",
            "Lipler", "Magania", "None", "Poison", "Swizzor", "Tdss",
@@ -16,3 +18,18 @@ def write_predictions(predictions, ids, outfile):
         f.write("Id,Prediction\n")
         for i, history_id in enumerate(ids):
             f.write("%s,%d\n" % (history_id, predictions[i]))
+
+def save_sparse_csr(filename,array):
+    '''
+    Saves a numpy sparse matrix to a file for easy loading later
+    '''
+    np.savez(filename,data = array.data ,indices=array.indices,
+             indptr =array.indptr, shape=array.shape )
+
+def load_sparse_csr(filename):
+    '''
+    Loads a numpy sparse matrix from a file
+    '''
+    loader = np.load(filename)
+    return csr_matrix((  loader['data'], loader['indices'], loader['indptr']),
+                         shape = loader['shape'])
