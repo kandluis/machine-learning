@@ -4,6 +4,7 @@
 
 # ignore temporary python notebook directories
 .ipynb*
+*.pyc
 
 # ignore pdf files, and other TeX files
 *.pdf
@@ -11,5 +12,10 @@
 # ignore image files
 *.jpg
 *.jpeg
-*.
 
+# ignore .xml files
+*.xml
+
+# ignore zipped and .tar files
+*.tar
+*.tar.gz
