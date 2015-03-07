@@ -12,6 +12,7 @@
 # ignore image files
 *.jpg
 *.jpeg
+*.png
 
 # ignore .xml files
 *.xml
