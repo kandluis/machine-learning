@@ -9,11 +9,6 @@
 # ignore pdf files, and other TeX files
 *.pdf
 
-# ignore image files
-*.jpg
-*.jpeg
-*.png
-
 # ignore .xml files
 *.xml
 
@@ -26,3 +21,29 @@ generative*
 *.npz
 *.npy
 *.save
+
+# ignore all latex temp files
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.act
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc1
+*.out
+*.synctex.gz
+*.fls
+.fdb*
