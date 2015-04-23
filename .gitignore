@@ -47,3 +47,8 @@ generative*
 *.synctex.gz
 *.fls
 .fdb*
+
+# ignore images and pickled data
+*.p
+*.png
+*.svg
