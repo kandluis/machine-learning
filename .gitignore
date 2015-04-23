@@ -52,3 +52,10 @@ generative*
 *.p
 *.png
 *.svg
+
+# ignore data archives
+*.gz
+
+# ignore latex files
+*.bst
+*.sty
