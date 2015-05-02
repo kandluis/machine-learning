@@ -16,7 +16,7 @@ class SwingyMonkey:
         visual: Boolean variable on whether or not to visualize the game.
                 Default to True. False leads to quicker iterations.
                 False argument also renders tick_length useless, as no time is
-                spent waiting between game_steps. The game window is still displayed,
+                spent waiting between game_steps (1ms). The game window is still displayed,
                 but no images are rendered.
 
         sound: Boolean variable on whether or not to play sounds.
@@ -264,7 +264,10 @@ class SwingyMonkey:
                 self.reward_fn(0.0)            
         
         # Wait just a bit.
-        if self.visual: pg.time.delay(self.tick_length)
+        if self.visual: 
+            pg.time.delay(self.tick_length)
+        else:
+            pg.time.delay(1) 
 
         # Move things.
         self.hook -= self.horz_speed
@@ -278,7 +281,7 @@ class SwingyMonkey:
 if __name__ == '__main__':
     
     # Create the game object.
-    game = SwingyMonkey(visual=False)
+    game = SwingyMonkey()
 
     # Loop until you hit something.
     while game.game_loop():
