@@ -3,7 +3,7 @@ import sys
 
 class QLearner:
     '''
-    Implements a Q-Learning algorithm with discretized pixel bins
+    Implements a Q-Learning algorithm with discretized pixel bins.
     '''
     def __init__(self):
         self.last_state  = None

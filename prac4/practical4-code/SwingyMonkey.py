@@ -2,13 +2,22 @@ import sys
 import pygame as pg
 import numpy.random as npr
 
+# universal file for game parameters
+from parameters import game_params
+
 class SwingyMonkey:
 
-    def __init__(self, sound=True, text=None, action_callback=None, 
+    def __init__(self,visual=True,sound=True, text=None, action_callback=None, 
                  reward_callback=None, tick_length=100):
         """Constructor for the SwingyMonkey class.
 
         Possible Keyword Arguments:
+
+        visual: Boolean variable on whether or not to visualize the game.
+                Default to True. False leads to quicker iterations.
+                False argument also renders tick_length useless, as no time is
+                spent waiting between game_steps. The game window is still displayed,
+                but no images are rendered.
 
         sound: Boolean variable on whether or not to play sounds.
                Defaults to True.
@@ -28,18 +37,21 @@ class SwingyMonkey:
                      Defaults to 100ms, but you might want to make it
                      smaller for training."""
 
+        # Specify screen rendering properties
+        self.visual = visual
+
         # Don't change these.
-        self.screen_width  = 600
-        self.screen_height = 400
-        self.horz_speed    = 25
-        self.impulse       = 15
-        self.gravity       = 3
-        self.tree_mean     = 5
-        self.tree_gap      = 200
-        self.tree_offset   = -300
-        self.edge_penalty  = -10.0
-        self.tree_penalty  = -5.0
-        self.tree_reward   = 1.0
+        self.screen_width  = game_params['screen_width']
+        self.screen_height = game_params['screen_height']
+        self.horz_speed    = game_params['horz_speed']
+        self.impulse       = game_params['impulse']
+        self.gravity       = game_params['gravity']
+        self.tree_mean     = game_params['tree_mean']
+        self.tree_gap      = game_params['tree_gap']
+        self.tree_offset   = game_params['tree_offset']
+        self.edge_penalty  = game_params['edge_penalty']
+        self.tree_penalty  = game_params['tree_penalty']
+        self.tree_reward   = game_params['tree_reward']
 
         # Store arguments.
         self.sound         = sound
@@ -57,6 +69,7 @@ class SwingyMonkey:
             self.sound = False
 
         # Set up the screen for rendering.
+
         self.screen = pg.display.set_mode((self.screen_width, self.screen_height), 0, 32)
 
         # Load external resources.
@@ -119,9 +132,10 @@ class SwingyMonkey:
         screen.  It calls the action and reward callbacks.'''
 
         # Render the background.
-        self.screen.blit(self.background_img, (self.iter,0))
-        if self.iter < self.background_img.get_width() - self.screen_width:
-            self.screen.blit(self.background_img, (self.iter+self.background_img.get_width(),0))
+        if self.visual:
+            self.screen.blit(self.background_img, (self.iter,0))
+            if self.iter < self.background_img.get_width() - self.screen_width:
+                self.screen.blit(self.background_img, (self.iter+self.background_img.get_width(),0))
 
         # Perhaps generate a new tree.
         if self.next_tree <= 0:
@@ -130,12 +144,13 @@ class SwingyMonkey:
                                  'y': int((0.3 + npr.rand()*0.65)*(self.screen_height-self.tree_gap)),
                                  's': False })
         # Process input events.
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                sys.exit()
-            elif self.action_fn is None and event.type == pg.KEYDOWN:
-                self.vel = npr.poisson(self.impulse)
-                self.hook = self.screen_width
+        if self.visual:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    sys.exit()
+                elif self.action_fn is None and event.type == pg.KEYDOWN:
+                    self.vel = npr.poisson(self.impulse)
+                    self.hook = self.screen_width
 
         # Perhaps take an action via the callback.
         if self.action_fn is not None and self.action_fn(self.get_state()):
@@ -161,15 +176,16 @@ class SwingyMonkey:
         for tree in self.trees:
             tree['x'] -= self.horz_speed
 
-            # Render tree.
-            self.screen.blit(self.tree_img, (tree['x'], self.tree_offset))
+            if self.visual: 
+                # Render tree.
+                self.screen.blit(self.tree_img, (tree['x'], self.tree_offset))
 
-            # Render gap in tree.
-            self.screen.blit(self.background_img, (tree['x'], tree['y']),
+                # Render gap in tree.
+                self.screen.blit(self.background_img, (tree['x'], tree['y']),
                              (tree['x']-self.iter, tree['y'],
                               self.tree_img.get_width(), self.tree_gap))
-            if self.iter < self.background_img.get_width() - self.screen_width:
-                self.screen.blit(self.background_img, (tree['x'], tree['y']),
+                if self.iter < self.background_img.get_width() - self.screen_width:
+                    self.screen.blit(self.background_img, (tree['x'], tree['y']),
                                  (tree['x']-(self.iter+self.background_img.get_width()), tree['y'],
                                   self.tree_img.get_width(), self.tree_gap))
                 
@@ -195,27 +211,29 @@ class SwingyMonkey:
                     self.blop_snd.play()
 
         # Monkey swings down on a vine.
-        if self.vel < 0:
+        if self.vel < 0 and self.visual:
             pg.draw.line(self.screen, (92,64,51), (self.screen_width/2+20, self.monkey_loc-25), (self.hook,0), 4)
 
         # Render the monkey.
-        self.screen.blit(self.monkey_img, (self.monkey_left, monkey_top))
+        if self.visual:
+            self.screen.blit(self.monkey_img, (self.monkey_left, monkey_top))
 
         # Fail on hitting top or bottom.
         if monkey_bot > self.screen_height or monkey_top < 0:
             edge_hit = True
 
         # Render the score
-        score_text = self.font.render("Score: %d" % (self.score), 1, (230, 40, 40))
-	self.screen.blit(score_text, score_text.get_rect())
+        if self.visual:
+            score_text = self.font.render("Score: %d" % (self.score), 1, (230, 40, 40))
+            self.screen.blit(score_text, score_text.get_rect())
 
-        if self.text is not None:
+        if self.text is not None and self.visual:
             text = self.font.render(self.text, 1, (230, 40, 40))
             textpos = text.get_rect()
             self.screen.blit(text, (self.screen_width-textpos[2],0,textpos[2],textpos[3]))
 
         # Render the display.
-        pg.display.update()
+        if self.visual: pg.display.update()
 
         # If failed, play sound and exit.  Also, assign rewards.
         if edge_hit:
@@ -246,7 +264,7 @@ class SwingyMonkey:
                 self.reward_fn(0.0)            
         
         # Wait just a bit.
-        pg.time.delay(self.tick_length)
+        if self.visual: pg.time.delay(self.tick_length)
 
         # Move things.
         self.hook -= self.horz_speed
@@ -260,7 +278,7 @@ class SwingyMonkey:
 if __name__ == '__main__':
     
     # Create the game object.
-    game = SwingyMonkey()
+    game = SwingyMonkey(visual=False)
 
     # Loop until you hit something.
     while game.game_loop():
