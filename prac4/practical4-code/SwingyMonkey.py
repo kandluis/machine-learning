@@ -256,6 +256,7 @@ class SwingyMonkey:
 
         return True
 
+# if called directly, creates a SwingyMonkey object with no learning
 if __name__ == '__main__':
     
     # Create the game object.
