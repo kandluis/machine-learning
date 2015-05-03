@@ -1,4 +1,4 @@
-Readme File for SwingMoney Learning Algorithms
+Readme file for SwingMoney Learning Algorithms
 
 Created by:
   @Luis A. Perez
@@ -11,11 +11,15 @@ Private Repository (for access, email luisperez@college):
 Program use:
 python run.py [options] LearnerClass1 LearnerClass2 ...
   
-  parameters:
+  options:
     -h, --help            
                       show this help message and exit
-    --train_iters=TRAIN_ITERS
+    --train-iters=TRAIN_ITERS
                       Set number of training epochs
+    --test-iters=TEST-ITERS
+                      Set the number of iterations to over which to average the results.
     --plots=PLOTS
                       Boolean specifying whether or not to generated plots.
+
+  If not LearnerClass is given, the default class used is Learner. To add a LearnerClass, simply add a file learnerclass.py and define the LearnerClass therein.
   

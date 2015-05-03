@@ -10,6 +10,9 @@ import copy
 # store history on epochs
 from history import History
 
+# to make graphs
+from stats import Plots
+
 def parse_learners(args):
     """
     Each element is a class name like "Learner".
@@ -44,7 +47,7 @@ def init_learner(learner, learner_classes):
   return learner_classes[learner]()
 
 def session(learner, options):
-  learner = init_learner(learner, options.learner_classes)
+  learner_class = init_learner(learner, options.learner_classes)
 
   # history dictionaries: epoch # -> whatever
   rewards = {}
@@ -53,32 +56,40 @@ def session(learner, options):
 
   history = History(rewards, scores, data)
 
-  print "Starting training phase..."
+  print "Starting training phase for %s ..." % (learner)
   max_score = 0
-  for t in xrange(options.train_iters):
+  for t in xrange(options.train_iters + options.test_iters):
     prev_score = scores[t-1] if t > 0 else 0
-    print("======= Epoch %d / %d. Max score: %d. Previous epoch score: %d" % (t,options.train_iters,max_score, prev_score))
+    # print information about the epoch currently being run
+    if t == options.train_iters:
+      print("Starting testing phase for %s ..." % (learner))
+    if t < options.train_iters:
+      print("======= Training epoch %d / %d." % (t,options.train_iters))
+    else:
+      print("======= Test epoch %d / %d." % (t - options.train_iters, options.test_iters))
+    print("Max score: %d. Previous epoch score: %d" % (max_score, prev_score))
 
     # Make a new monkey object.
-    swing = SwingyMonkey(sound=options.video,   
+    swing = SwingyMonkey(visual=options.video,
+                         sound=False,   
                          tick_length=options.live_train,        
-                         action_callback=learner.action_callback,
-                         reward_callback=learner.reward_callback)
+                         action_callback=learner_class.action_callback,
+                         reward_callback=learner_class.reward_callback)
 
     # Loop until you hit something.
     episode_rewards = []
     while swing.game_loop():
-      if learner.last_reward is not None:
-        episode_rewards.append(learner.last_reward)
+      if learner_class.last_reward is not None:
+        episode_rewards.append(learner_class.last_reward)
 
     # collect statistics
     rewards[t] = copy.deepcopy(episode_rewards)
     scores[t] = swing.score
-    data[t] = {'Qmatrix' : copy.deepcopy(learner.Q)}
+    data[t] = {'Qmatrix' : copy.deepcopy(learner_class.Q)}
 
     max_score = max(max_score, scores[t])
 
-  return history, learner
+  return history, learner_class
 
 def run_session(options, args):
     """
@@ -112,7 +123,12 @@ def run_session(options, args):
 
     # TODO : Here, we have access to each learner's training history as we
     # as the trained learner. Should do stuff with it.
+    # create a plot class for each learner 
+    plots = [Plots(learner_histories[learner], learner) for learner in options.learner_class_names]
 
+    # generate plots for each learner
+    for plot in plots:
+      plot.plot_score_by_epoch()
 
 def parse_inputs(args):
     usage_msg = "Usage:  %run [options] LearnerClass1 LearnerClass2 ..."
@@ -123,9 +139,13 @@ def parse_inputs(args):
         parser.print_help()
         sys.exit()
 
-    parser.add_option("--train_iters",
-                      dest="train_iters", default=128, type="int",
+    parser.add_option("--train-iters",
+                      dest="train_iters", default=1024, type="int",
                       help="Set number of training epochs")
+
+    parser.add_option("--test-iters",
+                      dest="test_iters", default=128, type="int",
+                      help="Set number of testing epochs for model evaluations")
 
     parser.add_option("--live_train",
                       dest="live_train", default=1, type="int",

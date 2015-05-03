@@ -5,7 +5,7 @@ class History(object):
     Allows access to the results from previous epochs.
     Copies are made so client can't change the history.
     """
-    def __init__(self,rewards,trees,data):
+    def __init__(self,rewards,scores,data):
       self.reward = copy.deepcopy(rewards)
       self.scores = copy.deepcopy(scores)
       self.data = copy.deepcopy(data)
