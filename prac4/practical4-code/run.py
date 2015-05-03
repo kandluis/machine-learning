@@ -56,7 +56,7 @@ def session(learner, options):
   print "Starting training phase..."
   max_score = 0
   for t in xrange(options.train_iters):
-    print("======= Epoch %d / %d. Max reward: %d" % (t,options.train_iters,max_score))
+    print("======= Epoch %d / %d. Max reward: %d. Epoch Reward: %d" % (t,options.train_iters,max_score, TODO))
 
     # Make a new monkey object.
     swing = SwingyMonkey(sound=options.video,   
