@@ -17,7 +17,7 @@ class QLearner:
         self.last_reward = None
         self.last_q_state = None
         self.iter_num = 0
-        self.epslon = .05
+        self.epsilon = .05
 
     def reset(self):
         self.last_state  = None
@@ -60,7 +60,7 @@ class QLearner:
 
         self.iter_num += 1
         if self.last_state is not None:
-            if npr.rand() > 1 - self.epslon:
+            if npr.rand() > 1 - self.epsilon:
                 new_action = np.argmax(self.Q[self.last_state])
             else:
                 new_action = npr.rand() < .4
