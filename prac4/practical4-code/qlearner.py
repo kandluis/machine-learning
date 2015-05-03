@@ -50,7 +50,7 @@ class QLearner(Learner):
         Simple Q-Learning algorithm
         '''
         height_diff = state['monkey']['top'] - state['tree']['top']
-        floor_diff = state['tree']['top'] - state['monkey']['bot']
+        floor_diff = state['tree']['bot'] - state['monkey']['bot']
         tree_dist = state['tree']['dist']
         monkey_vel = state['monkey']['vel']
         
