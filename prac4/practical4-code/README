@@ -1,0 +1,17 @@
+Readme File for SwingMoney Learning Algorithms
+
+Created by:
+  @Luis A. Perez
+  @Kevin Esckci
+  @Aidi Zhang
+
+Private Repository (for access, email luisperez@college):
+  git@github.com:kandluis/machine-learning.git
+
+Program use:
+python run.py [params]
+  
+  parameters:
+    --help displays help text
+    --
+  
