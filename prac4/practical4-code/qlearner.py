@@ -9,8 +9,8 @@ class QLearner(Learner):
     '''
     Implements a Q-Learning algorithm with discretized pixel bins.
     '''
-    def __init__(self, learn_fn = lambda i: 0.15, discount_fn = lambda i: 1,
-                 nbuckets_h = 5, nbuckets_w = 5):
+    def __init__(self, learn_fn = lambda i: 0.1, discount_fn = lambda i: 1,
+                 nbuckets_h = 10, nbuckets_w = 10):
         super(QLearner,self).__init__()
         self.Q = defaultdict(lambda: [0, 0])
         self.iter_num = 0
@@ -20,43 +20,47 @@ class QLearner(Learner):
         self.learn_fn = learn_fn
         self.discount_fn = discount_fn
 
-    def reset(self):
-        super(QLearner,self).reset()
+        # bucket discretization
+        self.nbuckets_w = nbuckets_w
+        self.nbuckets_h = nbuckets_h
 
-        self.iter_num = 0
-
-        self.learn_fn = None
-        self.discount_fn = None
-
-    def tree_discreet(self, tree_dist):
+    def width_discreet(self, width):
         '''
         Given the distance from the tree, returns a value specifying the bucket
         into which the distance falls.
         '''
-        return np.floor(float(tree_dist) / float((game_params['screen_width']) / 5.0))
+        return np.floor(float(width) / float((game_params['screen_width']) / self.nbuckets_w))
 
-    def height_diff_discreet(self, height_diff):
+    def height_discreet(self, height):
         '''
         Given the difference in height from the tree to the top of the monkey, 
         return a discretized value
         '''
-        return np.floor(float(height_diff) / (float(game_params['screen_height']) / 5.0))
+        return np.floor(float(height) / (float(game_params['screen_height']) / self.nbuckets_h))
 
-    def velocity_diff_discreet(self,vel):
-        return np.floor(float(vel)/3.0)
-
-    def action_callback(self, state):
+    def get_state(self,state):
         '''
-        Simple Q-Learning algorithm
+        Given returns the state of the game, returns the corresponding discreetized 
+        state for our RL algorithms
         '''
         height_diff = state['monkey']['top'] - state['tree']['top']
         floor_diff = state['tree']['bot'] - state['monkey']['bot']
         tree_dist = state['tree']['dist']
 
-        new_state = (self.height_diff_discreet(height_diff),
-                     self.height_diff_discreet(floor_diff),
-                     self.tree_discreet(tree_dist))
+        new_state = (self.height_discreet(height_diff),
+                     self.height_discreet(floor_diff),
+                     self.width_discreet(tree_dist))
 
+        return new_state
+
+    def action_callback(self, state):
+        '''
+        Simple Q-Learning algorithm
+        '''
+        # what state are we in?
+        new_state = self.get_state(state)
+
+        # increase iteration count and maximize chose action to maximize expected reward
         self.iter_num += 1
         new_action = np.argmax(self.Q[new_state])
 

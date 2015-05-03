@@ -9,8 +9,13 @@ Private Repository (for access, email luisperez@college):
   git@github.com:kandluis/machine-learning.git
 
 Program use:
-python run.py [params] Class1 Class2 ...
+python run.py [options] LearnerClass1 LearnerClass2 ...
   
   parameters:
-    --help displays help text
+    -h, --help            
+                      show this help message and exit
+    --train_iters=TRAIN_ITERS
+                      Set number of training epochs
+    --plots=PLOTS
+                      Boolean specifying whether or not to generated plots.
   
