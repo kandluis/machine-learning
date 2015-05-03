@@ -1,19 +1,45 @@
 import numpy.random as npr
 import sys
 
+import numpy as np
+
+from parameters import game_params
+from collections import defaultdict
+
 class QLearner:
     '''
     Implements a Q-Learning algorithm with discretized pixel bins.
     '''
     def __init__(self):
+        self.Q = defaultdict(lambda: [0,0])
         self.last_state  = None
         self.last_action = None
         self.last_reward = None
+        self.last_q_state = None
 
     def reset(self):
         self.last_state  = None
         self.last_action = None
         self.last_reward = None
+        self.last_q_state = None
+
+
+    def tree_discreet(self,tree_dist):
+        '''
+        Given the distance from the tree, returns a value specifying the bucket
+        into which the distance falls.
+        '''
+        try:
+            return int(np.log2(tree_dist+1))
+        except ValueError:
+            print tree_dist
+
+    def height_diff_discreet(self,height_diff):
+        '''
+        Given the difference in height from the tree to the top of the monkey, 
+        return a discretized value
+        '''
+        return int(height_diff / (game_params['screen_height'] / 16.0))
 
     def action_callback(self, state):
         '''Implement this function to learn things and take actions.
@@ -24,8 +50,23 @@ class QLearner:
         # You'll need to take an action, too, and return it.
         # Return 0 to swing and 1 to jump.
 
-        new_action = npr.rand() < 0.1
-        new_state  = state
+        height_diff = state['tree']['top'] - state['monkey']['top']
+        tree_dist = state['tree']['dist']
+        
+        new_state = (self.height_diff_discreet(height_diff) , self.tree_discreet(tree_dist))
+
+        if self.last_state is not None:
+            new_action = np.argmax(self.Q[self.last_state])
+        else:
+            new_action = npr.rand() < 0.1
+
+        # we need update our Q for the last state and action
+        if self.last_state is not None and self.last_action is not None:
+            s = self.last_state
+            a = self.last_action
+            r = self.last_reward
+            sp = new_state
+            self.Q[s][a] += 0.5*(r + 0.9*max(self.Q[sp]) - self.Q[s][a])
 
         self.last_action = new_action
         self.last_state  = new_state
@@ -34,7 +75,6 @@ class QLearner:
 
     def reward_callback(self, reward):
         '''This gets called so you can see what reward you get.'''
-
         self.last_reward = reward
 
 

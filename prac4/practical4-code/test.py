@@ -6,7 +6,7 @@ from SwingyMonkey import SwingyMonkey
 
 if __name__ == '__main__':
   
-  iters = 0   # TODO -should be a commandline parameter
+  iters = 100   # TODO -should be a commandline parameter
   learner = QLearner() # TODO - should be a commandline parameter
 
   # training phase for our learner
