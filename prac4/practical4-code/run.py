@@ -1,9 +1,9 @@
 from SwingyMonkey import SwingyMonkey
 
-# used for commandline argument parsing
+# used for command-line argument parsing
 from optparse import OptionParser
 
-# to get commandline arguments
+# to get command-line arguments
 import sys
 import copy
 
