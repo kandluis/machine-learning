@@ -6,14 +6,14 @@ from SwingyMonkey import SwingyMonkey
 
 if __name__ == '__main__':
   
-  iters = 100   # TODO -should be a commandline parameter
+  iters = 100000   # TODO -should be a commandline parameter
   learner = QLearner() # TODO - should be a commandline parameter
 
   # training phase for our learner
   for ii in xrange(iters):
 
       # Make a new monkey object.
-      swing = SwingyMonkey(visual=False,           # Don't visualize 
+      swing = SwingyMonkey(visual=True,           # Don't visualize
                            sound=False,            # Don't play sounds.
                            text="Epoch %d" % (ii), # Display the epoch on screen.
                            tick_length=1,          # Make game ticks super fast.

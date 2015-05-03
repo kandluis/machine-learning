@@ -16,12 +16,15 @@ class QLearner:
         self.last_action = None
         self.last_reward = None
         self.last_q_state = None
+        self.iter_num = 0
+        self.epslon = .05
 
     def reset(self):
         self.last_state  = None
         self.last_action = None
         self.last_reward = None
         self.last_q_state = None
+        self.iter_num = None
 
 
     def tree_discreet(self,tree_dist):
@@ -30,7 +33,7 @@ class QLearner:
         into which the distance falls.
         '''
         try:
-            return int(np.log2(tree_dist+1))
+            return int(tree_dist / (game_params['screen_width'] / 20.0))
         except ValueError:
             print tree_dist
 
@@ -55,8 +58,12 @@ class QLearner:
         
         new_state = (self.height_diff_discreet(height_diff) , self.tree_discreet(tree_dist))
 
+        self.iter_num += 1
         if self.last_state is not None:
-            new_action = np.argmax(self.Q[self.last_state])
+            if npr.rand() > 1 - self.epslon:
+                new_action = np.argmax(self.Q[self.last_state])
+            else:
+                new_action = npr.rand() < .4
         else:
             new_action = npr.rand() < 0.1
 
@@ -66,7 +73,7 @@ class QLearner:
             a = self.last_action
             r = self.last_reward
             sp = new_state
-            self.Q[s][a] += 0.5*(r + 0.9*max(self.Q[sp]) - self.Q[s][a])
+            self.Q[s][a] += (1./self.iter_num)*(r + 0.9*max(self.Q[sp]) - self.Q[s][a])
 
         self.last_action = new_action
         self.last_state  = new_state
