@@ -10,7 +10,7 @@ class QLearner(Learner):
     Implements a Q-Learning algorithm with discretized pixel bins.
     '''
     def __init__(self, learn_fn = lambda i: 0.15, discount_fn = lambda i: 1,
-                 nbuckets_h = 5, nbuckets_w = 5, nbuckets_v = 3):
+                 nbuckets_h = 5, nbuckets_w = 5):
         super(QLearner,self).__init__()
         self.Q = defaultdict(lambda: [0, 0])
         self.iter_num = 0
@@ -50,14 +50,12 @@ class QLearner(Learner):
         Simple Q-Learning algorithm
         '''
         height_diff = state['monkey']['top'] - state['tree']['top']
-        floor_diff = state['tree']['top'] - state['monkey']['bot']
+        floor_diff = state['tree']['bot'] - state['monkey']['bot']
         tree_dist = state['tree']['dist']
-        monkey_vel = state['monkey']['vel']
-        
+
         new_state = (self.height_diff_discreet(height_diff),
                      self.height_diff_discreet(floor_diff),
-                     self.tree_discreet(tree_dist),
-                     self.velocity_diff_discreet(monkey_vel))
+                     self.tree_discreet(tree_dist))
 
         self.iter_num += 1
         new_action = np.argmax(self.Q[new_state])
