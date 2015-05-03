@@ -9,9 +9,8 @@ Private Repository (for access, email luisperez@college):
   git@github.com:kandluis/machine-learning.git
 
 Program use:
-python run.py [params]
+python run.py [params] Class1 Class2 ...
   
   parameters:
     --help displays help text
-    --
   
