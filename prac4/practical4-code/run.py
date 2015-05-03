@@ -48,15 +48,16 @@ def session(learner, options):
 
   # history dictionaries: epoch # -> whatever
   rewards = {}
-  trees = {}
+  scores = {}
   data = {}
 
-  history = History(rewards, trees, data)
+  history = History(rewards, scores, data)
 
   print "Starting training phase..."
   max_score = 0
   for t in xrange(options.train_iters):
-    print("======= Epoch %d / %d. Max reward: %d. Epoch Reward: %d" % (t,options.train_iters,max_score, TODO))
+    prev_score = scores[t-1] if t > 0 else 0
+    print("======= Epoch %d / %d. Max score: %d. Previous epoch score: %d" % (t,options.train_iters,max_score, prev_score))
 
     # Make a new monkey object.
     swing = SwingyMonkey(sound=options.video,   
@@ -72,10 +73,10 @@ def session(learner, options):
 
     # collect statistics
     rewards[t] = copy.deepcopy(episode_rewards)
-    trees[t] = swing.score
+    scores[t] = swing.score
     data[t] = {'Qmatrix' : copy.deepcopy(learner.Q)}
 
-    max_score = max(max_score, trees[t])
+    max_score = max(max_score, scores[t])
 
   return history, learner
 

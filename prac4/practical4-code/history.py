@@ -7,12 +7,12 @@ class History(object):
     """
     def __init__(self,rewards,trees,data):
       self.reward = copy.deepcopy(rewards)
-      self.trees = copy.deepcopy(trees)
+      self.scores = copy.deepcopy(scores)
       self.data = copy.deepcopy(data)
 
-  def __init__(self,rewards,trees,data):
+  def __init__(self,rewards,scores,data):
     self.epoch = lambda t: History.EpochHistory(
-      rewards[t], trees[t], data[t])
+      rewards[t], scores[t], data[t])
 
     self.last_epoch = lambda: max(rewards.keys())
     self.num_rounds = lambda: max(rewards.keys()) + 1
