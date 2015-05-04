@@ -125,7 +125,11 @@ def run_session(options, args):
 
     n = len(learners_to_run)
 
+<<<<<<< HEAD
     options.video = options.live_train > 0
+=======
+    options.video = options.live_train != 1
+>>>>>>> c684842a8e4807daa03c6a5b9c51f505ad3386b3
 
     learner_histories = {}
     taught_learners = {}
