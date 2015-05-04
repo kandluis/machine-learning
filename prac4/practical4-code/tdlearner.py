@@ -8,8 +8,8 @@ class TDLearner(Learner):
     '''
     Implements a Q-Learning algorithm with discretized pixel bins.
     '''
-    def __init__(self, learn_fn = lambda i: 0.15, discount_fn = lambda i: .95,
-                 nbuckets_h = 5., nbuckets_w = 5):
+    def __init__(self, learn_fn = lambda i: 0.1, discount_fn = lambda i: .95,
+                 bucket_height = 20., bucket_width = 50, velocity_bucket = 150):
         #super(QLearner,self).__init__()
         self.V = defaultdict(lambda: 0.0)
         self.NSA = defaultdict(lambda: 0.0)
@@ -25,9 +25,11 @@ class TDLearner(Learner):
         self.learn_fn = learn_fn
         self.discount_fn = discount_fn
 
-        # bucket discretization
-        self.nbuckets_w = nbuckets_w
-        self.nbuckets_h = nbuckets_h
+        # bucket discretization (width of buckets)
+        self.bucket_width = bucket_width
+        self.bucket_height = bucket_height
+        self.velocity_bucket = velocity_bucket
+
 
     def pssa(self, sp, s, a):
         return float(self.NSAS[(s, a, sp)])/self.NSA[(s, a)]
@@ -36,19 +38,19 @@ class TDLearner(Learner):
         if self.RSA[(s,a)] != 0:
             return float(self.RSA[(s, a)])/self.NSA[(s, a)]
         else:
-            return 0
+            return 0.0
 
     def optimal_action_helper(self, s, a):
         res = 0.0
         for sp in self.reachable[s,a]:
-            res =+ self.V[sp]*self.pssa(sp, s, a)
+            res =+ float(self.V[sp])*self.pssa(sp, s, a)
         return res
 
     def optimal_action(self, s):
         jump = self.expected_reward(s, 1) + self.optimal_action_helper(s, 1)
         no_jump = self.expected_reward(s, 0) + self.optimal_action_helper(s, 0)
         res = 1 if jump > no_jump else 0
-        print jump, no_jump
+        #print jump, no_jump
         return res
 
     def width_discreet(self, width):
@@ -56,17 +58,17 @@ class TDLearner(Learner):
         Given the distance from the tree, returns a value specifying the bucket
         into which the distance falls.
         '''
-        return np.round(float(width) /50)
+        return np.round(float(width) /self.bucket_width)
 
     def height_discreet(self, height):
         '''
         Given the difference in height from the tree to the top of the monkey,
         return a discretized value
         '''
-        return np.round(float(height) / 20)
+        return np.round(float(height) / self.bucket_height)
 
     def velocity_discreet(self, vel):
-        return np.round(float(vel)/8)
+        return np.round(float(vel)/self.velocity_bucket)
 
     def get_state(self,state):
         '''
@@ -91,6 +93,7 @@ class TDLearner(Learner):
         '''
         # what state are we in?
         new_state = self.get_state(state)
+        #print new_state
 
         # increase iteration count and maximize chose action to maximize expected reward
         self.iter_num += 1
@@ -107,7 +110,7 @@ class TDLearner(Learner):
             self.NSA[(s, a)] += 1
             self.NSAS[(s, a, sp)] += 1
             self.RSA[(s, a)] += r
-            self.reachable[(s, a)] = self.reachable[(s, a)].union(sp)
+            self.reachable[(s, a)].add(sp)
 
             learn_rate = self.learn_fn(self.iter_num)
             discount = self.discount_fn(self.iter_num)
