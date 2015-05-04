@@ -23,6 +23,9 @@ class Learner(object):
         '''
         return {}
 
+    def save_params(self):
+        return {}
+
     def reset(self):
         self.last_state  = None
         self.last_action = None

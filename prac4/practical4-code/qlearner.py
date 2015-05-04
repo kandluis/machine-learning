@@ -33,6 +33,16 @@ class QLearner(Learner):
                  })
         return d
 
+    def save_params(self):
+        d = super(QLearner, self).save_params()
+        d.update({  'learn_rate'    :   self.learn_fn(0),
+                    'discount'      :   self.discount_fn(0),
+                    'bucket_height' :   self.bucket_height,
+                    'bucket_width'  :   self.bucket_width,
+                    'velocity_bucket':   self.velocity_bucket 
+                })
+        return d
+
     def width_discreet(self, width):
         '''
         Given the distance from the tree, returns a value specifying the bucket
