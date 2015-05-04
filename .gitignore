@@ -1,3 +1,6 @@
+#ignore text files
+*.txt
+
 # ignore data files
 *.csv
 *.zip
