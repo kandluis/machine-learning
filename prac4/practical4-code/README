@@ -20,6 +20,9 @@ python run.py [options] LearnerClass1 LearnerClass2 ...
                       Set the number of iterations to over which to average the results.
     --plots=PLOTS
                       Boolean specifying whether or not to generated plots.
+    --outfile=OUTFILE
+                      String used when saving pickled data. Saves pickled learner class to 
+                      ./TIME/OUTFILE_CLASS.p and ./TIME/OUTFILE_CLASS_h.p
 
   If not LearnerClass is given, the default class used is Learner. To add a LearnerClass, simply add a file learnerclass.py and define the LearnerClass therein.
   

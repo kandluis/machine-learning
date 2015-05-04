@@ -8,15 +8,6 @@ import sys
 import copy
 import os
 
-# to get time
-from datetime import datetime
-
-# to save results
-try:
-   import cPickle as pickle
-except:
-   import pickle
-
 # store history on epochs
 from history import History
 
@@ -65,9 +56,8 @@ def session(learner, options):
   # history dictionaries: epoch # -> whatever
   rewards = {}
   scores = {}
-  data = {}
 
-  history = History(rewards, scores, data)
+  history = History(rewards, scores)
 
   print "Starting training phase for %s ..." % (learner)
   max_score = 0
@@ -97,10 +87,10 @@ def session(learner, options):
 
     # collect statistics
     rewards[t] = copy.deepcopy(episode_rewards)
-    scores[t] = swing.score
-    data[t] = {'Qmatrix' : copy.deepcopy(learner_class.Q)}
+    scores[t] = copy.deepcopy(swing.score)
 
     max_score = max(max_score, scores[t])
+
 
   return history, learner_class
 
@@ -147,7 +137,7 @@ def run_session(options, args):
     if not helpers.save_results(options.learner_class_names, 
                                 taught_learners, learner_histories, 
                                 options.outfile):
-      print "Failed to save results".
+      print "Failed to save results."
 
    
 def parse_inputs(args):
@@ -167,7 +157,7 @@ def parse_inputs(args):
                       dest="test_iters", default=128, type="int",
                       help="Set number of testing epochs for model evaluations")
 
-    parser.add_option("--live_train",
+    parser.add_option("--live-train",
                       dest="live_train", default=1, type="int",
                       help="Clock tick for training. Not displayed if 1.")
 

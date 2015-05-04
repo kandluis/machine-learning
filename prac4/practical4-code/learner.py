@@ -17,6 +17,12 @@ class Learner(object):
         self.last_reward = None
         self.Q = None
 
+    def pickle(self):
+        '''
+        Defines data to be pickled in dictionary format
+        '''
+        return {}
+
     def reset(self):
         self.last_state  = None
         self.last_action = None

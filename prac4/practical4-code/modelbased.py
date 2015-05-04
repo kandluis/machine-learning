@@ -2,17 +2,14 @@ from learner import Learner
 from collections import defaultdict
 
 import numpy as np
-import copy
 
-from parameters import game_params
-
-class QLearner(Learner):
+class ModelLearner(Learner):
     '''
     Implements a Q-Learning algorithm with discretized pixel bins.
     '''
     def __init__(self, learn_fn = lambda i: 0.15, discount_fn = lambda i: .95,
-                 bucket_height = 5., bucket_width = 20, velocity_bucket = 4):
-        super(QLearner,self).__init__()
+                 bucket_height = 5., bucket_width = 10, velocity_bucket = 4):
+        super(ModelLearner,self).__init__()
         self.Q = defaultdict(lambda: [0, 0])
         self.iter_num = 0
         self.epoch_iters = 0
@@ -25,13 +22,6 @@ class QLearner(Learner):
         self.bucket_width = bucket_width
         self.bucket_height = bucket_height
         self.velocity_bucket = velocity_bucket
-
-    def pickle(self):
-        d = super(QLearner,self).pickle()
-        d.update({
-                 'QMatrix' : dict(self.Q)
-                 })
-        return d
 
     def width_discreet(self, width):
         '''
