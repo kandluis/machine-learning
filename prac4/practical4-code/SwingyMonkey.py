@@ -266,8 +266,6 @@ class SwingyMonkey:
         # Wait just a bit.
         if self.visual: 
             pg.time.delay(self.tick_length)
-        else:
-            pg.time.delay(1) 
 
         # Move things.
         self.hook -= self.horz_speed
