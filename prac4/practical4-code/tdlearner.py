@@ -10,12 +10,13 @@ class TDLearner(Learner):
     '''
     def __init__(self, learn_fn = lambda i: 0.15, discount_fn = lambda i: .95,
                  nbuckets_h = 5., nbuckets_w = 5):
-        super(QLearner,self).__init__()
+        #super(QLearner,self).__init__()
         self.V = defaultdict(lambda: 0.0)
         self.NSA = defaultdict(lambda: 0.0)
         self.RSA = defaultdict(lambda: 0.0)
         self.NSAS = defaultdict(lambda: 0.0)
-        self.reachable = defaultdict(lambda: {})
+        self.Q = None
+        self.reachable = defaultdict(lambda: set([]))
         self.iter_num = 0
         self.epoch_iters = 0
         self.last_state = None
@@ -32,7 +33,10 @@ class TDLearner(Learner):
         return float(self.NSAS[(s, a, sp)])/self.NSA[(s, a)]
 
     def expected_reward(self, s, a):
-        return float(self.RSA[(s,a)])/self.NSA[(s, a)]
+        if self.RSA[(s,a)] != 0:
+            return float(self.RSA[(s, a)])/self.NSA[(s, a)]
+        else:
+            return 0
 
     def optimal_action_helper(self, s, a):
         res = 0.0
@@ -43,24 +47,26 @@ class TDLearner(Learner):
     def optimal_action(self, s):
         jump = self.expected_reward(s, 1) + self.optimal_action_helper(s, 1)
         no_jump = self.expected_reward(s, 0) + self.optimal_action_helper(s, 0)
-        return 1 if jump > no_jump else 0
+        res = 1 if jump > no_jump else 0
+        print jump, no_jump
+        return res
 
     def width_discreet(self, width):
         '''
         Given the distance from the tree, returns a value specifying the bucket
         into which the distance falls.
         '''
-        return np.round(float(width) /20)
+        return np.round(float(width) /50)
 
     def height_discreet(self, height):
         '''
         Given the difference in height from the tree to the top of the monkey,
         return a discretized value
         '''
-        return np.round(float(height) / 5)
+        return np.round(float(height) / 20)
 
     def velocity_discreet(self, vel):
-        return np.round(float(vel)/4)
+        return np.round(float(vel)/8)
 
     def get_state(self,state):
         '''
@@ -113,8 +119,10 @@ class TDLearner(Learner):
             learn_rate = self.learn_fn(self.iter_num)
             discount = self.discount_fn(self.iter_num)
             self.V[s] += learn_rate * (r + discount*self.V[sp] - self.V[s])
-
-        new_action = self.optimal_action(sp)
+            new_action = self.optimal_action(sp)
+            #print self.V[s]
+        else:
+            new_action = 1
 
         self.last_action = new_action
         self.last_state = new_state
