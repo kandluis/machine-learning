@@ -13,6 +13,7 @@ from history import History
 
 # to make graphs
 from stats import Plots
+import numpy as np
 
 # helper functions
 import helpers
@@ -125,11 +126,7 @@ def run_session(options, args):
 
     n = len(learners_to_run)
 
-<<<<<<< HEAD
     options.video = options.live_train > 0
-=======
-    options.video = options.live_train != 1
->>>>>>> c684842a8e4807daa03c6a5b9c51f505ad3386b3
 
     learner_histories = {}
     taught_learners = {}
@@ -153,7 +150,8 @@ def run_session(options, args):
 
     # save results if possible
     if not helpers.save_results(options.learner_class_names, 
-                                taught_learners, learner_histories, 
+                                taught_learners, learner_histories,
+                                learner_scores,
                                 options.outfile):
       print "Failed to save results."
 
@@ -173,7 +171,7 @@ def parse_inputs(args):
                       help="Set number of training epochs")
 
     parser.add_option("--test-iters",
-                      dest="test_iters", default=128, type="int",
+                      dest="test_iters", default=3, type="int",
                       help="Set number of testing epochs for model evaluations")
 
     parser.add_option("--live-train",
