@@ -4,6 +4,8 @@ import csv
 
 import os, errno
 
+from pprint import pprint
+
 # to save results
 try:
    import cPickle as pickle
@@ -20,7 +22,7 @@ def write_csv(history, outfile):
     csvwriter.writerows(zip(xs,ys))
 
 
-def save_results(learner_class_names,learner_classes, learner_histories, out):
+def save_results(learner_class_names,learner_classes, learner_histories, learner_scores, out):
     # save output of each learner
     time = datetime.strftime(datetime.now(), '%Y-%m-%d_%H.%M.%S')
     path = os.path.abspath(os.path.join(os.getcwd(),time))
@@ -42,7 +44,11 @@ def save_results(learner_class_names,learner_classes, learner_histories, out):
         csv_outpath = os.path.join(path, csv_outfile)
         with open(outpath,"wb") as f:
           pickle.dump(learner_classes[learner].pickle(), f)
-          write_csv(learner_histories[learner], csv_outpath)
+        
+        write_csv(learner_histories[learner], csv_outpath)
+        
+        with open(hist_outpath, 'wt') as out:
+          pprint(learner_scores[learner], stream=out)
 
       return True
 

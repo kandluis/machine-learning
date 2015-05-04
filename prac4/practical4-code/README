@@ -16,8 +16,10 @@ python run.py [options] LearnerClass1 LearnerClass2 ...
                       show this help message and exit
     --train-iters=TRAIN_ITERS
                       Set number of training epochs
-    --test-iters=TEST-ITERS
-                      Set the number of iterations to over which to average the results.
+    --test-iters=TEST_ITERS
+                      Set the number of iterations over which to average the results for testing (unused)
+    --live-train=LIVE_TRAIN
+                      Clock tick for training. Not displayed if 0.
     --plots=PLOTS
                       Boolean specifying whether or not to generated plots.
     --outfile=OUTFILE

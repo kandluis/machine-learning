@@ -66,6 +66,8 @@ def session(learner, options):
     # print information about the epoch currently being run
     if t == options.train_iters:
       print("Starting testing phase for %s ..." % (learner))
+      options.video = True
+      options.live_train = 1
     if t < options.train_iters:
       print("======= Training epoch %d / %d." % (t,options.train_iters))
     else:
@@ -94,6 +96,15 @@ def session(learner, options):
 
   return history, learner_class
 
+def get_score(hist, c):
+  '''
+  Calculates some statistics of the final c epochs in hist.
+  '''
+  n = hist.num_rounds()
+  rewards = [hist.epoch(t).scores for t in xrange(n-c,n)]
+
+  return {  'mean'      : sum(rewards)/len(rewards),
+            'median'    : np.median(rewards)}
 def run_session(options, args):
     """
     Runs the training simulation given a parsed set of options and its leftover
@@ -114,15 +125,18 @@ def run_session(options, args):
 
     n = len(learners_to_run)
 
-    options.video = options.live_train > 1
+    options.video = options.live_train > 0
 
     learner_histories = {}
     taught_learners = {}
+    learner_scores = {}
     # train each class and store results
     for learner, learner_class in options.learner_classes.iteritems():
       hist, learned = session(learner,options)
       learner_histories[learner] = hist
       taught_learners[learner] = learned
+
+      learner_scores[learner] = get_score(hist, options.test_iters)
 
     # TODO : Here, we have access to each learner's training history as we
     # as the trained learner. Should do stuff with it.
@@ -138,6 +152,7 @@ def run_session(options, args):
                                 taught_learners, learner_histories, 
                                 options.outfile):
       print "Failed to save results."
+
 
    
 def parse_inputs(args):
@@ -158,8 +173,8 @@ def parse_inputs(args):
                       help="Set number of testing epochs for model evaluations")
 
     parser.add_option("--live-train",
-                      dest="live_train", default=1, type="int",
-                      help="Clock tick for training. Not displayed if 1.")
+                      dest="live_train", default=0, type="int",
+                      help="Clock tick for training. Not displayed less than 1.")
 
     parser.add_option("--plots",
                       dest="plots", default="true", type="string",
@@ -168,7 +183,7 @@ def parse_inputs(args):
     parser.add_option("--outfile",
                       dest="outfile", default="results", type="string",
                       help="Saves pickled learner class to ./TIME/OUTFILE_CLASS.p\
-                      and ./TIME/OUTFILE_CLASS_h.p")
+                      and ./TIME/OUTFILE_CLASS.csv")
 
     return parser
 
