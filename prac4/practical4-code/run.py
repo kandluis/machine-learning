@@ -6,12 +6,25 @@ from optparse import OptionParser
 # to get command-line arguments
 import sys
 import copy
+import os
+
+# to get time
+from datetime import datetime
+
+# to save results
+try:
+   import cPickle as pickle
+except:
+   import pickle
 
 # store history on epochs
 from history import History
 
 # to make graphs
 from stats import Plots
+
+# helper functions
+import helpers
 
 def parse_learners(args):
     """
@@ -130,6 +143,13 @@ def run_session(options, args):
     for plot in plots:
       plot.plot_score_by_epoch()
 
+    # save results if possible
+    if not helpers.save_results(options.learner_class_names, 
+                                taught_learners, learner_histories, 
+                                options.outfile):
+      print "Failed to save results".
+
+   
 def parse_inputs(args):
     usage_msg = "Usage:  %run [options] LearnerClass1 LearnerClass2 ..."
     parser = OptionParser(usage=usage_msg)
@@ -154,6 +174,11 @@ def parse_inputs(args):
     parser.add_option("--plots",
                       dest="plots", default="true", type="string",
                       help="Boolean specifying whether to generate plots or not.")
+
+    parser.add_option("--outfile",
+                      dest="outfile", default="results", type="string",
+                      help="Saves pickled learner class to ./TIME/OUTFILE_CLASS.p\
+                      and ./TIME/OUTFILE_CLASS_h.p")
 
     return parser
 
