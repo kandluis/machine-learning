@@ -57,11 +57,11 @@ def session(learner, options):
   max_score = 0
   for t in xrange(options.train_iters):
     prev_score = scores[t-1] if t > 0 else 0
-    print("======= Epoch %d / %d. Max score: %d. Previous epoch score: %d" % (t,options.train_iters,max_score, prev_score))
-
+    #print("======= Epoch %d / %d. Max score: %d. Previous epoch score: %d" % (t,options.train_iters,max_score, prev_score))
+    print t, prev_score
     # Make a new monkey object.
-    swing = SwingyMonkey(sound=options.video,   
-                         tick_length=options.live_train,        
+    swing = SwingyMonkey(visual=False,sound=options.video,
+                         tick_length=0,#options.live_train,
                          action_callback=learner.action_callback,
                          reward_callback=learner.reward_callback)
 

@@ -9,8 +9,8 @@ class QLearner(Learner):
     '''
     Implements a Q-Learning algorithm with discretized pixel bins.
     '''
-    def __init__(self, learn_fn = lambda i: 0.1, discount_fn = lambda i: 1,
-                 nbuckets_h = 10, nbuckets_w = 10):
+    def __init__(self, learn_fn = lambda i: 0.15, discount_fn = lambda i: .95,
+                 nbuckets_h = 5., nbuckets_w = 5):
         super(QLearner,self).__init__()
         self.Q = defaultdict(lambda: [0, 0])
         self.iter_num = 0
@@ -29,14 +29,17 @@ class QLearner(Learner):
         Given the distance from the tree, returns a value specifying the bucket
         into which the distance falls.
         '''
-        return np.floor(float(width) / float((game_params['screen_width']) / self.nbuckets_w))
+        return np.round(float(width) /20) #float((game_params['screen_width']) / self.nbuckets_w))
 
     def height_discreet(self, height):
         '''
         Given the difference in height from the tree to the top of the monkey, 
         return a discretized value
         '''
-        return np.floor(float(height) / (float(game_params['screen_height']) / self.nbuckets_h))
+        return np.round(float(height) / 5)#(float(game_params['screen_height']) / self.nbuckets_h))
+
+    def velocity_discreet(self, vel):
+        return np.round(float(vel)/4)
 
     def get_state(self,state):
         '''
@@ -46,10 +49,19 @@ class QLearner(Learner):
         height_diff = state['monkey']['top'] - state['tree']['top']
         floor_diff = state['tree']['bot'] - state['monkey']['bot']
         tree_dist = state['tree']['dist']
+        vel = state['monkey']['vel']
+
+        #new_state = (self.height_discreet(height_diff),
+        #             self.height_discreet(floor_diff),
+        #            self.width_discreet(tree_dist))
+
+        #new_state = (self.height_discreet(floor_diff),
+        #            self.width_discreet(tree_dist))
 
         new_state = (self.height_discreet(height_diff),
-                     self.height_discreet(floor_diff),
-                     self.width_discreet(tree_dist))
+                     self.velocity_discreet(vel),
+                    self.width_discreet(tree_dist))
+
 
         return new_state
 
