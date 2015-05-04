@@ -76,16 +76,9 @@ class TDLearner(Learner):
         state for our RL algorithms
         '''
         height_diff = state['monkey']['top'] - state['tree']['top']
-        floor_diff = state['tree']['bot'] - state['monkey']['bot']
         tree_dist = state['tree']['dist']
         vel = state['monkey']['vel']
 
-        #new_state = (self.height_discreet(height_diff),
-        #             self.height_discreet(floor_diff),
-        #            self.width_discreet(tree_dist))
-
-        #new_state = (self.height_discreet(floor_diff),
-        #            self.width_discreet(tree_dist))
 
         new_state = (self.height_discreet(height_diff),
                      self.velocity_discreet(vel),

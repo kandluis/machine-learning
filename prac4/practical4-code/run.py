@@ -145,13 +145,15 @@ def run_session(options, args):
     plots = [Plots(learner_histories[learner], learner) for learner in options.learner_class_names]
 
     # generate plots for each learner
+    learner_plots = {}
     for plot in plots:
-      plot.plot_score_by_epoch()
+      learner_plots[plot.learner] = plot.plot_score_by_epoch()
 
     # save results if possible
     if not helpers.save_results(options.learner_class_names, 
                                 taught_learners, learner_histories,
                                 learner_scores,
+                                learner_plots,
                                 options.outfile):
       print "Failed to save results."
 

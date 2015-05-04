@@ -13,10 +13,16 @@ class Plots(object):
     xs = range(self.history.num_rounds())
     ys = [self.history.epoch(t).scores + 1 for t in xs]
 
+    f1 = plt.figure()
     plt.scatter(xs,np.log(ys))
     plt.xlabel("Training Iteration")
     plt.ylabel("Log of (Score + 1)")
     plt.title("%s Score vs Training Iteration" % (self.learner))
-    plt.show()
 
-
+    f2 = plt.figure()
+    plt.scatter(xs,ys)
+    plt.xlabel("Training Iteration")
+    plt.ylabel("Score")
+    plt.title("%s Score vs Training Iteration" % (self.learner))
+    
+    return f1,f2
