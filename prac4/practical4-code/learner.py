@@ -15,7 +15,6 @@ class Learner(object):
         self.last_state  = None
         self.last_action = None
         self.last_reward = None
-        self.Q = None
 
     def pickle(self):
         '''

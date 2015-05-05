@@ -5,6 +5,10 @@ import numpy.random as npr
 # universal file for game parameters
 from parameters import game_params
 
+import os
+
+resources = os.path.dirname(__file__)
+
 class SwingyMonkey:
 
     def __init__(self,visual=True,sound=True, text=None, action_callback=None, 
@@ -71,14 +75,16 @@ class SwingyMonkey:
         # Set up the screen for rendering.
 
         self.screen = pg.display.set_mode((self.screen_width, self.screen_height), 0, 32)
+        if not visual:
+            pg.display.iconify()
 
         # Load external resources.
-        self.background_img = pg.image.load('res/jungle-pixel.png').convert()
-        self.monkey_img     = pg.image.load('res/monkey.png').convert_alpha()
-        self.tree_img       = pg.image.load('res/tree-pixel.png').convert_alpha()
+        self.background_img = pg.image.load(os.path.join(resources, 'res/jungle-pixel.png')).convert()
+        self.monkey_img     = pg.image.load(os.path.join(resources, 'res/monkey.png')).convert_alpha()
+        self.tree_img       = pg.image.load(os.path.join(resources, 'res/tree-pixel.png')).convert_alpha()
         if self.sound:
-            self.screech_snd    = pg.mixer.Sound('res/screech.wav')
-            self.blop_snd       = pg.mixer.Sound('res/blop.wav')
+            self.screech_snd    = pg.mixer.Sound(os.path.join(resources, 'res/screech.wav'))
+            self.blop_snd       = pg.mixer.Sound(os.path.join(resources, 'res/blop.wav'))
 
         # Set up text rendering.
         self.font = pg.font.Font(None, 36)

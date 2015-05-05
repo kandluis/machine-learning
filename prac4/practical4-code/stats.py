@@ -15,14 +15,14 @@ class Plots(object):
 
     f1 = plt.figure()
     plt.scatter(xs,np.log(ys))
-    plt.xlabel("Training Iteration")
+    plt.xlabel("Epoch")
     plt.ylabel("Log of (Score + 1)")
-    plt.title("%s Score vs Training Iteration" % (self.learner))
+    plt.title("%s Score vs Epoch" % (self.learner))
 
     f2 = plt.figure()
     plt.scatter(xs,ys)
-    plt.xlabel("Training Iteration")
+    plt.xlabel("Epoch")
     plt.ylabel("Score")
-    plt.title("%s Score vs Training Iteration" % (self.learner))
+    plt.title("%s Score vs Epoch" % (self.learner))
     
     return f1,f2

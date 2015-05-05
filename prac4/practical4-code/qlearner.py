@@ -48,17 +48,17 @@ class QLearner(Learner):
         Given the distance from the tree, returns a value specifying the bucket
         into which the distance falls.
         '''
-        return np.round(float(width) /self.bucket_width) 
+        return int(np.round(float(width) /self.bucket_width))
 
     def height_discreet(self, height):
         '''
         Given the difference in height from the tree to the top of the monkey, 
         return a discretized value
         '''
-        return np.round(float(height) / self.bucket_height)
+        return int(np.round(float(height) / self.bucket_height))
 
     def velocity_discreet(self, vel):
-        return np.round(float(vel)/self.velocity_bucket)
+        return int(np.round(float(vel)/self.velocity_bucket))
 
     def get_state(self,state):
         '''
@@ -85,7 +85,11 @@ class QLearner(Learner):
 
         # increase iteration count and maximize chose action to maximize expected reward
         self.iter_num += 1
-        new_action = np.argmax(self.Q[new_state])
+        try:
+            new_action = np.argmax(self.Q[new_state])
+        except TypeError:
+            print new_state
+            raise Exception(self.Q[new_state])
 
         # we need update our Q for the last state and action
         if (self.last_state is not None and 
