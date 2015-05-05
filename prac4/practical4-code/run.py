@@ -67,6 +67,8 @@ def session(learner, options):
     # print information about the epoch currently being run
     if t == options.train_iters:
       print("Starting testing phase for %s ..." % (learner))
+      pvideo = options.video
+      plive_train = options.live_train
       options.video = True
       options.live_train = 1
     if t < options.train_iters:
@@ -94,6 +96,10 @@ def session(learner, options):
 
     max_score = max(max_score, scores[t])
 
+
+  # reset
+  options.video = pvideo
+  options.live_train = plive_train
 
   return history, learner_class
 

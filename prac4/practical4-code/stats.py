@@ -1,6 +1,8 @@
 from matplotlib import pylab as plt
 import numpy as np
 
+import seaborn as sns
+
 class Plots(object):
   def __init__(self,history,learner):
     self.history = history

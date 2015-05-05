@@ -11,7 +11,7 @@ class QLearner(Learner):
     Implements a Q-Learning algorithm with discretized pixel bins.
     '''
     def __init__(self, learn_fn = lambda i: 0.15, discount_fn = lambda i: .95,
-                 bucket_height = 5., bucket_width = 20, velocity_bucket = 4):
+                 bucket_height = 2., bucket_width = 2, velocity_bucket = 2):
         super(QLearner,self).__init__()
         self.Q = defaultdict(lambda: [0, 0])
         self.iter_num = 0
