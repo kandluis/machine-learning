@@ -1,0 +1,108 @@
+{
+    "language"        : "PYTHON",
+    "main-file"       : "branin_qlearner.py",
+    "experiment-name" : "qlearner",
+    "variables" : {
+        "discount" : {
+            "type" : "FLOAT",
+            "size" : 1,
+            "min"  : 0,
+            "max"  : 1
+        },
+        "learning_rate" : {
+            "type" : "FLOAT",
+            "size" : 1,
+            "min"  : 0,
+            "max"  : 1
+        },
+        "width_size" : {
+            "type" : "INT",
+            "size" : 1,
+            "min"  : 1,
+            "max"  : 50
+        },
+        "height_size"   :   {
+            "type"  : "INT",
+            "size"  : 1,
+            "min"   : 1,
+            "max"   : 50
+        },
+        "velocity_bucket"   :   {
+            "type"  : "INT",
+            "size"  : 1,
+            "min"   : 1,
+            "max"   : 20
+        }
+    }
+}
+
+Optimization Function was negative mean of 100 iterations, given 100 training iterations to start with.
+
+Minimum expected objective value under model is -87.20054 (+/- 4.56258), at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                discount      float      0.920354    
+                learning_rat  float      0.036297    
+                height_size   int        18          
+                width_size    int        50          
+                velocity_buc  int        18          
+
+Minimum of observed values is -137.910000, at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                discount      float      0.920349    
+                learning_rat  float      0.035950    
+                height_size   int        18          
+                width_size    int        50          
+                velocity_buc  int        18  
+
+
+At iteration 130, the changed the above so that the state space became larger.
+
+Below are the results from 130 to 156.
+
+Optimizing function was the same as above.
+
+Minimum expected objective value under model is -80.60257 (+/- 6.40105), at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                discount      float      1.000000    
+                learning_rat  float      0.116277    
+                height_size   int        18          
+                width_size    int        120         
+                velocity_buc  int        200         
+
+Minimum of observed values is -157.980000, at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                discount      float      1.000000    
+                learning_rat  float      0.098125    
+                height_size   int        17          
+                width_size    int        83          
+                velocity_buc  int        200         
+
+
+Now, I am further relaxing the constraints on the velocity so that it can be up to 1000.
+
+
+Lastly, we are changing the constraints (restarting, actually), so that now we run 3000 iterations of training and measure over the following 500 iterations of testing. 
+
+This will hopefully allow us to achieve much higher results.
+
+Minimum expected objective value under model is -87.72753 (+/- 5.99425), at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                discount      float      1.000000    
+                learning_rat  float      0.368372    
+                height_size   int        16          
+                width_size    int        85          
+                velocity_buc  int        1000        
+
+Minimum of observed values is -157.980000, at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                discount      float      1.000000    
+                learning_rat  float      0.098125    
+                height_size   int        17          
+                width_size    int        83          
+                velocity_buc  int        200     

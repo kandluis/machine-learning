@@ -8,8 +8,8 @@ class TDLearner(QLearner):
     '''
     Implements a Q-Learning algorithm with discretized pixel bins.
     '''
-    def __init__(self, learn_fn = lambda i: 0.1, discount_fn = lambda i: .95,
-                 bucket_height = 20., bucket_width = 50, velocity_bucket = 150):
+    def __init__(self, learn_fn = lambda i: 0.03595, discount_fn = lambda i: .92034,
+                 bucket_height = 2, bucket_width = 2, velocity_bucket = 2):
         super(TDLearner,self).__init__(learn_fn, discount_fn,bucket_height, bucket_width,
                                        velocity_bucket)
 
@@ -17,22 +17,28 @@ class TDLearner(QLearner):
         self.V = defaultdict(float)
         # state,action count. maps (s,a) -> # times we've been in s and performed action a
         self.NSA = defaultdict(int)
-        self.RSA = defaultdict(lambda: 0.0)
-        self.NSAS = defaultdict(lambda: 0.0)
-        self.reachable = defaultdict(lambda: set([]))
+
+        # total reward from (s,a) -> # reward
+        self.RSA = defaultdict(float)
+
+        # transition from (s,a) to (s') -> #times transition has occured
+        self.NSAS = defaultdict(int)
+
+        # set of reachable states 
+        self.reachable = defaultdict(lambda: set())
 
     def pssa(self, sp, s, a):
-        return float(self.NSAS[(s, a, sp)])/self.NSA[(s, a)]
+        return float(self.NSAS[(s, a, sp)])/float(self.NSA[(s, a)])
 
     def expected_reward(self, s, a):
-        if self.RSA[(s,a)] != 0:
-            return float(self.RSA[(s, a)])/self.NSA[(s, a)]
+        if self.NSA[(s,a)] != 0:
+            return float(self.RSA[(s, a)])/float(self.NSA[(s, a)])
         else:
             return 0.0
 
     def optimal_action_helper(self, s, a):
         res = 0.0
-        for sp in self.reachable[s,a]:
+        for sp in self.reachable[(s,a)]:
             res =+ float(self.V[sp])*self.pssa(sp, s, a)
         return res
 

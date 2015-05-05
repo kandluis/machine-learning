@@ -3,34 +3,27 @@ import numpy as np
 
 from collections import defaultdict
 
-class QLearner2(QLearner):
+class QLearner3(QLearner):
   '''
   Implements a more intelligent Q-Learning Mechanism. Uses Logistic function for learning learn_rate
   decay. Not that the parameters have been optimized using SpearMint.
   '''
-  def __init__(self, k = 2, x0 = 0, bucket_height = 46, bucket_width = 200, velocity_bucket = 100):
-    # for more info: http://en.wikipedia.org/wiki/Logistic_function 
-    # k is steepness
-    # x0 is the value at which f(x0) = 0.5
-    def logistic(x,x0,k):
-      return 1.0 / (1.0 + np.exp(k*(x - x0)))
-
-    super(QLearner2,self).__init__(learn_fn = None, bucket_width = bucket_width, bucket_height = bucket_height, velocity_bucket= velocity_bucket)
+  def __init__(self, escale = 100, lscale = 20, bucket_height = 4, bucket_width = 8, velocity_bucket = 4):
+    super(QLearner3,self).__init__(learn_fn = None, discount_fn=None, bucket_width = bucket_width, bucket_height = bucket_height, velocity_bucket= velocity_bucket)
 
     # overwrite learn_fn and discount_fn into a logistic function
-    self.learn_fn = lambda x: logistic(x,x0,k)
-    self.k = k
-    self.x0 = x0
-
-    # discount has been proven to be essentially 1 if we want to be good
-    self.discount_fn = lambda i : 0.923
+    self.learn_fn = lambda x: 1.0 / (float(x) / float(lscale)) if x > lscale else 1.0
+    self.discount_fn = lambda x: 0.923
+    self.epsilon_fn = lambda x: 1.0 / (float(x) / float(escale)) if x > escale else 1.0
+    self.escale = escale
+    self.lscale = lscale
 
     # used to keep track of the number of times a state Q(s,a) has been updated
     # so maps (s,a) -> int
     self.QCount = defaultdict(int)
 
     def pickle(self):
-        d = super(QLearner2,self).pickle()
+        d = super(QLearner3,self).pickle()
         d.update({
                  'QMatrix' : dict(self.Q),
                  'Qcount'  : dict(self.QCount)
@@ -38,9 +31,9 @@ class QLearner2(QLearner):
         return d
 
     def save_params(self):
-        d = super(QLearner2, self).save_params()
-        d.update({  'k'    :   self.k,
-                    'x0'   :   self.x0
+        d = super(QLearner3, self).save_params()
+        d.update({  'escale'    :   self.escale,
+                    'lscale'   :   self.lscale
                 })
         return d
 
@@ -50,7 +43,13 @@ class QLearner2(QLearner):
 
       self.iter_num += 1
       try:
-          new_action = np.argmax(self.Q[new_state])
+          # we're now epsion-greedy
+          epsilon = epsilon_fn(self.QCount(s,0) + self.QCount(s,1))
+          if np.random.rand() < epsilon:
+            new_state = 0 if np.random.rand() < 0.5 else 1
+          else:
+            new_action = np.argmax(self.Q[new_state])
+
       except TypeError:
           print new_state
           raise Exception(self.Q[new_state])

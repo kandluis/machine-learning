@@ -1,6 +1,11 @@
 #ignore text files
 *.txt
 
+# don't ignore results
+!results.txt
+# ignore .out files
+*.out
+
 # ignore data files
 *.csv
 *.zip
