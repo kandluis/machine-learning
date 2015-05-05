@@ -37,8 +37,6 @@ class QLearner4(Learner):
         self.NSA = defaultdict(float)
 
 
-
-
     def pickle(self):
         d = super(QLearner4,self).pickle()
         d.update({
