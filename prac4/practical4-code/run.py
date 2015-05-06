@@ -110,8 +110,9 @@ def get_score(hist, c):
   n = hist.num_rounds()
   rewards = [hist.epoch(t).scores for t in xrange(n-c,n)]
 
-  return {  'mean'      : sum(rewards)/len(rewards),
+  return {  'mean'      : float(sum(rewards))/ float(len(rewards)),
             'median'    : np.median(rewards)}
+            
 def run_session(options, args):
     """
     Runs the training simulation given a parsed set of options and its leftover

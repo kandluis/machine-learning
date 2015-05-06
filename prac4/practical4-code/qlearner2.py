@@ -6,7 +6,7 @@ from collections import defaultdict
 class QLearner2(QLearner):
   '''
   Implements a more intelligent Q-Learning Mechanism. Uses Logistic function for learning learn_rate
-  decay. Not that the parameters have been optimized using SpearMint.
+  decay. Note that the parameters have been optimized using SpearMint.
   '''
   def __init__(self, k = 2, x0 = 0, bucket_height = 46, bucket_width = 200, velocity_bucket = 100):
     # for more info: http://en.wikipedia.org/wiki/Logistic_function 
