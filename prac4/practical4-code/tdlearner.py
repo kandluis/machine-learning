@@ -14,9 +14,10 @@ class TDLearner(QLearner):
                                        velocity_bucket)
 
         # value function, maps state, s -> value, V(s)
-        self.V = defaultdict(float)
+        self.V = defaultdict(lambda: 0.0)
+
         # state,action count. maps (s,a) -> # times we've been in s and performed action a
-        self.NSA = defaultdict(int)
+        self.NSA = defaultdict(lambda: 0)
 
         # total reward from (s,a) -> # reward
         self.RSA = defaultdict(float)
@@ -36,6 +37,7 @@ class TDLearner(QLearner):
         else:
             return 0.0
 
+    # returns expected value of future returns
     def optimal_action_helper(self, s, a):
         res = 0.0
         for sp in self.reachable[(s,a)]:
