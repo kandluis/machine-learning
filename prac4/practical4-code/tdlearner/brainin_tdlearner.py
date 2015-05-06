@@ -19,7 +19,7 @@ import numpy as np
 TRAIN_ITERS = 100
 TEST_ITERS = 100
 
-def branin(buckets_w, buckets_h, buckets_v):
+def branin(buckets_w, buckets_h, buckets_v, learn_rate, discount_rate):
     def run_game():
         # Make a new monkey object.
         swing = SwingyMonkey(visual=False,      # no video
@@ -36,7 +36,9 @@ def branin(buckets_w, buckets_h, buckets_v):
     # make a new learner with the given parameters
     learner_class = TDLearner(bucket_height = buckets_h,
                               bucket_width = buckets_w,
-                              velocity_bucket = buckets_v)
+                              velocity_bucket = buckets_v,
+                              learn_fn=lambda i: learn_rate,
+                              discount_fn=lambda i: discount_rate)
 
     # train the learner
     for t in xrange(TRAIN_ITERS):
@@ -65,4 +67,6 @@ def main(job_id, params):
     print params
     return branin(params['width_size'],
                   params['height_size'],
-                  params['velocity_bucket'])
+                  params['velocity_bucket'],
+                  params['learn_rate'],
+                  params['discount_rate'])

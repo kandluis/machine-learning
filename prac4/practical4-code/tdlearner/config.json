@@ -20,6 +20,18 @@
             "size"  : 1,
             "min"   : 1,
             "max"   : 1000
+        },
+        "learn_rate"    :   {
+            "type"  :   "FLOAT",
+            "size"  :   1,
+            "min"   :   0.0,
+            "max"   :   1.0
+        },
+        "discount_rate" :   {
+            "type"  :   "FLOAT",
+            "size"  :   1,
+            "min"   :   0.0,
+            "max"   :   1.0
         }
     }
 }
