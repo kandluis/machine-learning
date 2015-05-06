@@ -8,8 +8,8 @@ class TDLearner(QLearner):
     '''
     Implements a Q-Learning algorithm with discretized pixel bins.
     '''
-    def __init__(self, learn_fn = lambda i: 0.03595, discount_fn = lambda i: .92034,
-                 bucket_height = 2, bucket_width = 2, velocity_bucket = 2):
+    def __init__(self, learn_fn = lambda i: .999, discount_fn = lambda i: 0,
+                 bucket_height = 1., bucket_width = 28, velocity_bucket = 1000):
         super(TDLearner,self).__init__(learn_fn, discount_fn,bucket_height, bucket_width,
                                        velocity_bucket)
 
@@ -24,7 +24,7 @@ class TDLearner(QLearner):
         # transition from (s,a) to (s') -> #times transition has occured
         self.NSAS = defaultdict(int)
 
-        # set of reachable states 
+        # set of reachable states
         self.reachable = defaultdict(lambda: set())
 
     def pssa(self, sp, s, a):
@@ -39,7 +39,7 @@ class TDLearner(QLearner):
     def optimal_action_helper(self, s, a):
         res = 0.0
         for sp in self.reachable[(s,a)]:
-            res =+ float(self.V[sp])*self.pssa(sp, s, a)
+            res += float(self.V[sp])*self.pssa(sp, s, a)
         return res
 
     def optimal_action(self, s):
