@@ -1,0 +1,79 @@
+{
+    "language"        : "PYTHON",
+    "main-file"       : "branin_decay.py",
+    "experiment-name" : "qlearner_decay",
+    "variables" : {
+        "width_size" : {
+            "type" : "INT",
+            "size" : 1,
+            "min"  : 1,
+            "max"  : 600
+        },
+        "height_size"   :   {
+            "type"  : "INT",
+            "size"  : 1,
+            "min"   : 1,
+            "max"   : 400
+        },
+        "velocity_bucket"   :   {
+            "type"  : "INT",
+            "size"  : 1,
+            "min"   : 1,
+            "max"   : 500
+        },
+        "learn_rate"    :   {
+            "type" : "FLOAT",
+            "size"  : 1,
+            "min"   : 0.0,
+            "max"   : 1.0
+        },
+        "discount_rate"    :   {
+            "type" : "FLOAT",
+            "size"  : 1,
+            "min"   : 0.0,
+            "max"   : 1.0
+        },
+        "learning_bin"    :   {
+            "type" : "FLOAT",
+            "size"  : 1,
+            "min"   : 0.01,
+            "max"   : 200.0
+        },
+        "epsilon"    :   {
+            "type" : "FLOAT",
+            "size"  : 1,
+            "min"   : 0.0,
+            "max"   : 1.0
+        },
+        "epsilon_bin"    :   {
+            "type" : "FLOAT",
+            "size"  : 1,
+            "min"   : 0.1,
+            "max"   : 200.0
+        }
+    }
+}
+
+Minimum expected objective value under model is -131.90131 (+/- 3.98248), at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                velocity_buc  int        317         
+                width_size    int        271         
+                learn_rate    float      0.315916    
+                learning_bin  float      200.000000  
+                epsilon       float      0.098556    
+                discount_rat  float      0.000000    
+                height_size   int        226         
+                epsilon_bin   float      0.100000    
+
+Minimum of observed values is -154.420000, at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                velocity_buc  int        120         
+                width_size    int        521         
+                learn_rate    float      0.037747    
+                learning_bin  float      200.000000  
+                epsilon       float      0.000000    
+                discount_rat  float      0.000000    
+                height_size   int        225         
+                epsilon_bin   float      0.100000    
