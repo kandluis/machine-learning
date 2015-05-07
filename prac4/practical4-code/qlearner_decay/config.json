@@ -1,0 +1,55 @@
+{
+    "language"        : "PYTHON",
+    "main-file"       : "branin_decay.py",
+    "experiment-name" : "qlearner_decay",
+    "variables" : {
+        "width_size" : {
+            "type" : "INT",
+            "size" : 1,
+            "min"  : 1,
+            "max"  : 600
+        },
+        "height_size"   :   {
+            "type"  : "INT",
+            "size"  : 1,
+            "min"   : 1,
+            "max"   : 400
+        },
+        "velocity_bucket"   :   {
+            "type"  : "INT",
+            "size"  : 1,
+            "min"   : 1,
+            "max"   : 500
+        },
+        "learn_rate"    :   {
+            "type" : "FLOAT",
+            "size"  : 1,
+            "min"   : 0.0,
+            "max"   : 1.0
+        },
+        "discount_rate"    :   {
+            "type" : "FLOAT",
+            "size"  : 1,
+            "min"   : 0.0,
+            "max"   : 1.0
+        },
+        "learning_bin"    :   {
+            "type" : "FLOAT",
+            "size"  : 1,
+            "min"   : 0.01,
+            "max"   : 200.0
+        },
+        "epsilon"    :   {
+            "type" : "FLOAT",
+            "size"  : 1,
+            "min"   : 0.0,
+            "max"   : 1.0
+        },
+        "epsilon_bin"    :   {
+            "type" : "FLOAT",
+            "size"  : 1,
+            "min"   : 0.1,
+            "max"   : 200.0
+        }
+    }
+}

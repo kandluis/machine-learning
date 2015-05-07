@@ -1,0 +1,30 @@
+Readme file for SwingMoney Learning Algorithms
+
+Created by:
+  @Luis A. Perez
+  @Kevin Esckci
+  @Aidi Zhang
+
+Private Repository (for access, email luisperez@college):
+  git@github.com:kandluis/machine-learning.git
+
+Program use:
+python run.py [options] LearnerClass1 LearnerClass2 ...
+  
+  options:
+    -h, --help            
+                      show this help message and exit
+    --train-iters=TRAIN_ITERS
+                      Set number of training epochs
+    --test-iters=TEST_ITERS
+                      Set the number of iterations over which to average the results for testing (unused)
+    --live-train=LIVE_TRAIN
+                      Clock tick for training. Not displayed if 0.
+    --plots=PLOTS
+                      Boolean specifying whether or not to generated plots.
+    --outfile=OUTFILE
+                      String used when saving pickled data. Saves pickled learner class to 
+                      ./TIME/OUTFILE_CLASS.p and ./TIME/OUTFILE_CLASS_h.p
+
+  If not LearnerClass is given, the default class used is Learner. To add a LearnerClass, simply add a file learnerclass.py and define the LearnerClass therein.
+  
