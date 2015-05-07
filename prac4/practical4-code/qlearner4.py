@@ -10,9 +10,34 @@ from parameters import game_params
 class QLearner4(Learner):
     '''
     Implements a Q-Learning algorithm with discretized pixel bins.
+
+    Minimum expected objective value under model is -131.90131 (+/- 3.98248), at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                velocity_buc  int        317         
+                width_size    int        271         
+                learn_rate    float      0.315916    
+                learning_bin  float      200.000000  
+                epsilon       float      0.098556    
+                discount_rat  float      0.000000    
+                height_size   int        226         
+                epsilon_bin   float      0.100000    
+
+    Minimum of observed values is -154.420000, at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                velocity_buc  int        120         
+                width_size    int        521         
+                learn_rate    float      0.037747    
+                learning_bin  float      200.000000  
+                epsilon       float      0.000000    
+                discount_rat  float      0.000000    
+                height_size   int        225         
+                epsilon_bin   float      0.100000    
     '''
-    def __init__(self, learn_fn = lambda i: 0.315916, discount_fn = lambda i: 0,
-                 bucket_height = 226., bucket_width = 271, velocity_bucket = 317, learning_bin=200, epsilon=.098556,
+    def __init__(self, learn_fn = lambda i: 0.315916, discount_fn = lambda i: 1.0,
+                 bucket_height = 226., bucket_width = 271, velocity_bucket = 317, 
+                 learning_bin=200, epsilon=.098556,
                  epsilon_bin = 0.1):
         super(QLearner4,self).__init__()
         self.Q = defaultdict(lambda: [0, 0])

@@ -68,3 +68,23 @@ Minimum of observed values is -116.180000, at location:
                 velocity_buc  int        1000        
                 width_size    int        600         
                 height_size   int        232 
+
+
+Minimum expected objective value under model is -127.54761 (+/- 4.53392), at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                velocity_buc  int        440         
+                width_size    int        442         
+                discount_rat  float      0.954306    
+                height_size   int        227         
+                learn_rate    float      0.303168    
+
+Minimum of observed values is -159.750000, at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                velocity_buc  int        179         
+                width_size    int        469         
+                discount_rat  float      0.877524    
+                height_size   int        227         
+                learn_rate    float      0.317109    
+

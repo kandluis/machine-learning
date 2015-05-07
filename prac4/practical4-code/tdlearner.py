@@ -8,8 +8,8 @@ class TDLearner(QLearner):
     '''
     Implements a Q-Learning algorithm with discretized pixel bins.
     '''
-    def __init__(self, learn_fn = lambda i: .999, discount_fn = lambda i: 0,
-                 bucket_height = 1., bucket_width = 28, velocity_bucket = 1000):
+    def __init__(self, learn_fn = lambda i: .186493, discount_fn = lambda i: 1.0,
+                 bucket_height = 236., bucket_width = 530, velocity_bucket = 816):
         super(TDLearner,self).__init__(learn_fn, discount_fn,bucket_height, bucket_width,
                                        velocity_bucket)
 

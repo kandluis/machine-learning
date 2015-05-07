@@ -60,6 +60,9 @@ def session(learner, options):
 
   history = History(rewards, scores)
 
+  # save state
+  pvideo = options.video
+
   print "Starting training phase for %s ..." % (learner)
   max_score = 0
   for t in xrange(options.train_iters + options.test_iters):
@@ -67,10 +70,7 @@ def session(learner, options):
     # print information about the epoch currently being run
     if t == options.train_iters:
       print("Starting testing phase for %s ..." % (learner))
-      pvideo = options.video
-      plive_train = options.live_train
-      options.video = True
-      options.live_train = 1
+      options.video = (options.test_tick > 0)
     if t < options.train_iters:
       print("======= Training epoch %d / %d." % (t,options.train_iters))
     else:
@@ -80,7 +80,7 @@ def session(learner, options):
     # Make a new monkey object.
     swing = SwingyMonkey(visual=options.video,
                          sound=False,   
-                         tick_length=options.live_train,        
+                         tick_length=options.train_tick if t < options.train_iters else options.test_tick,        
                          action_callback=learner_class.action_callback,
                          reward_callback=learner_class.reward_callback)
 
@@ -99,7 +99,6 @@ def session(learner, options):
 
   # reset
   options.video = pvideo
-  options.live_train = plive_train
 
   return history, learner_class
 
@@ -112,7 +111,7 @@ def get_score(hist, c):
 
   return {  'mean'      : float(sum(rewards))/ float(len(rewards)),
             'median'    : np.median(rewards)}
-            
+
 def run_session(options, args):
     """
     Runs the training simulation given a parsed set of options and its leftover
@@ -133,7 +132,7 @@ def run_session(options, args):
 
     n = len(learners_to_run)
 
-    options.video = options.live_train > 0
+    options.video = options.train_tick > 0
 
     learner_histories = {}
     taught_learners = {}
@@ -144,7 +143,7 @@ def run_session(options, args):
       learner_histories[learner] = hist
       taught_learners[learner] = learned
 
-      learner_scores[learner] = get_score(hist, options.test_iters)
+      learner_scores[learner] = get_score(hist, options.test_iters if options.test_iters != 0 else min(100,options.train_iters))
 
     # TODO : Here, we have access to each learner's training history as we
     # as the trained learner. Should do stuff with it.
@@ -154,7 +153,10 @@ def run_session(options, args):
     # generate plots for each learner
     learner_plots = {}
     for plot in plots:
-      learner_plots[plot.learner] = plot.plot_score_by_epoch()
+      learner_plots[plot.learner] = list(plot.plot_score_by_epoch())
+      dist = plot.plot_distribution(options.test_iters)
+      if dist is not None:
+        learner_plots[plot.learner].append(dist)
 
     # save results if possible
     if not helpers.save_results(options.learner_class_names, 
@@ -183,9 +185,13 @@ def parse_inputs(args):
                       dest="test_iters", default=3, type="int",
                       help="Set number of testing epochs for model evaluations")
 
-    parser.add_option("--live-train",
-                      dest="live_train", default=0, type="int",
-                      help="Clock tick for training. Not displayed less than 1.")
+    parser.add_option("--train-tick",
+                      dest="train_tick", default=0, type="int",
+                      help="Clock tick for training. Not displayed when less than 1.")
+
+    parser.add_option("--test-tick",
+                      dest="test_tick", default=1, type="int",
+                      help="Clock tick for testing phase. Not displayed when less than 1.")
 
     parser.add_option("--plots",
                       dest="plots", default="true", type="string",

@@ -14,10 +14,9 @@ class ModelBased(TDLearner):
     '''
     Implements model based learning algorithm with value iteration.
     '''
-    def __init__(self, learn_fn = lambda i: .999, discount_fn = lambda i: 0,
-                 bucket_height = 1., bucket_width = 28, velocity_bucket = 1000):
-        super(ModelBased,self).__init__(learn_fn, discount_fn,bucket_height, bucket_width,
-                                       velocity_bucket)
+    def __init__(self, discount_fn = lambda i: 0,bucket_height = 1., bucket_width = 28, velocity_bucket = 1000):
+        super(ModelBased,self).__init__(learn_fn=lambda i:0, discount_fn=discount_fn,bucket_height=bucket_height, bucket_width=bucket_width,
+                                       velocity_bucket=velocity_bucket)
 
         # keep track of current optimal policy, maps state s -> action a
         self.optimal_policy = defaultdict(int)
