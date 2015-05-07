@@ -18,8 +18,12 @@ python run.py [options] LearnerClass1 LearnerClass2 ...
                       Set number of training epochs
     --test-iters=TEST_ITERS
                       Set the number of iterations over which to average the results for testing (unused)
-    --live-train=LIVE_TRAIN
-                      Clock tick for training. Not displayed if 0.
+    --train-tick=TRAIN_TICK
+                        Clock tick for training. Not displayed when less than
+                        1.
+    --test-tick=TEST_TICK
+                        Clock tick for testing phase. Not displayed when less
+                        than 1.
     --plots=PLOTS
                       Boolean specifying whether or not to generated plots.
     --outfile=OUTFILE
@@ -27,4 +31,10 @@ python run.py [options] LearnerClass1 LearnerClass2 ...
                       ./TIME/OUTFILE_CLASS.p and ./TIME/OUTFILE_CLASS_h.p
 
   If not LearnerClass is given, the default class used is Learner. To add a LearnerClass, simply add a file learnerclass.py and define the LearnerClass therein.
+
+  Example Runs:
+
+    python run.py --train-iters=100 --test-iters=100 --test-tick=50 TDLearnerBayes QLearnerBayes
+
+    Add your OWN :)
   
