@@ -1,0 +1,90 @@
+{
+    "language"        : "PYTHON",
+    "main-file"       : "branin_qlearner_long.py",
+    "experiment-name" : "qlearner",
+    "variables" : {
+        "discount" : {
+            "type" : "FLOAT",
+            "size" : 1,
+            "min"  : 0,
+            "max"  : 1
+        },
+        "learning_rate" : {
+            "type" : "FLOAT",
+            "size" : 1,
+            "min"  : 0,
+            "max"  : 1
+        },
+        "width_size" : {
+            "type" : "INT",
+            "size" : 1,
+            "min"  : 1,
+            "max"  : 600
+        },
+        "height_size"   :   {
+            "type"  : "INT",
+            "size"  : 1,
+            "min"   : 1,
+            "max"   : 400
+        },
+        "velocity_bucket"   :   {
+            "type"  : "INT",
+            "size"  : 1,
+            "min"   : 1,
+            "max"   : 1000
+        }
+    }
+}
+
+Minimum expected objective value under model is -29.45387 (+/- 56.23583), at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                discount      float      0.000000    
+                learning_rat  float      1.000000    
+                height_size   int        1           
+                width_size    int        1           
+                velocity_buc  int        1000        
+
+Minimum of observed values is -188.162000, at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                discount      float      0.000000    
+                learning_rat  float      0.999816    
+                height_size   int        1           
+                width_size    int        28          
+                velocity_buc  int        1000  
+
+
+Minimum expected objective value under model is -4.73548 (+/- 2.51311), at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                velocity_buc  int        1000        
+                width_size    int        600         
+                height_size   int        221         
+
+Minimum of observed values is -116.180000, at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                velocity_buc  int        1000        
+                width_size    int        600         
+                height_size   int        232 
+
+
+Minimum expected objective value under model is -127.54761 (+/- 4.53392), at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                velocity_buc  int        440         
+                width_size    int        442         
+                discount_rat  float      0.954306    
+                height_size   int        227         
+                learn_rate    float      0.303168    
+
+Minimum of observed values is -159.750000, at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                velocity_buc  int        179         
+                width_size    int        469         
+                discount_rat  float      0.877524    
+                height_size   int        227         
+                learn_rate    float      0.317109    
+

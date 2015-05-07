@@ -1,0 +1,17 @@
+Minimum expected objective value under model is -33.72728 (+/- 4.37375), at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                xval          float      0.000000    
+                velocity_buc  int        100         
+                width_size    int        200         
+                height_size   int        46          
+                kval          float      2.000000    
+
+Minimum of observed values is -88.000000, at location:
+                NAME          TYPE       VALUE
+                ----          ----       -----
+                xval          float      0.000000    
+                velocity_buc  int        100         
+                width_size    int        200         
+                height_size   int        46          
+                kval          float      2.000000    

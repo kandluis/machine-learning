@@ -1,6 +1,15 @@
 #ignore text files
 *.txt
 
+# don't ignore results
+!results.txt
+
+# and requirements
+!*requirement*
+
+# ignore .out files
+*.out
+
 # ignore data files
 *.csv
 *.zip
@@ -55,10 +64,11 @@ generative*
 *.p
 *.png
 *.svg
+*.jpg
+*latexmk
 
 # ignore data archives
 *.gz
 
-# ignore latex files
-*.bst
-*.sty
+# allow images in res folder
+!**/res/**
